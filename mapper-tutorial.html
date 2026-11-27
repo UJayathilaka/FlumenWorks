@@ -213,6 +213,7 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
   </div>
 </div>
 
+<script>addEventListener('error',function(e){try{var d=document.getElementById('fwerr')||document.body.appendChild(document.createElement('div'));d.id='fwerr';d.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:999;background:#300;color:#fcc;font:12px monospace;padding:8px;border-radius:8px;word-break:break-all';d.textContent='Error: '+(e.message||e.error)+' @'+(e.lineno||'');}catch(_){}});</script>
 <script>
 (function(){
 'use strict';
@@ -446,7 +447,7 @@ function populateVoices(){
   if(!voiceName||!VOICES.some(v=>v.name===voiceName)){ const pref=VOICES.find(v=>/natural/i.test(v.name)&&/en-US/i.test(v.lang))||VOICES.find(v=>/natural/i.test(v.name))||VOICES.find(v=>/google us english/i.test(v.name))||VOICES.find(v=>/aria|jenny|samantha|zira|daniel/i.test(v.name))||VOICES[0]; voiceName=pref?pref.name:''; }
   sel.value=voiceName; syncCaps();
 }
-if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=populateVoices; populateVoices(); }
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=function(){ try{populateVoices();}catch(e){console.error(e);} }; try{ populateVoices(); }catch(e){ console.error(e); } }
 function syncCaps(){ const on=!voiceName||capOn; cap.classList.toggle('off',!on); $('cc').classList.toggle('on',on); $('cc').setAttribute('aria-pressed',on); }
 var capOn=false;
 $('vsel').addEventListener('change',e=>{ voiceName=e.target.value; syncCaps(); if(started) play(); });
@@ -462,7 +463,8 @@ function speak(text){
 }
 /* ── sound effects (tiny, shared bus) ── */
 let NBUF=null;
-function sfx(kind){
+function sfx(kind){ try{ sfx0(kind); }catch(e){ console.error(e); } }
+function sfx0(kind){
   if(!ctx||!bus) return; const t=ctx.currentTime+0.01;
   const g=ctx.createGain(), p=ctx.createStereoPanner(), s=ctx.createGain(); s.gain.value=0.22; p.pan.value=0;
   g.connect(p); p.connect(bus.dry); g.connect(s); s.connect(bus.rev);
@@ -589,8 +591,8 @@ function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.
   b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
 function fwPrime(){ try{ if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); } }catch(_){}
   try{ if(typeof REC!=='undefined'&&typeof voiceName==='string'&&voiceName.indexOf('rec-')===0){ const k=voiceName.slice(4); window.__fwPrimed=window.__fwPrimed||{}; if(REC[k]){ const a=new Audio(REC[k].src); a.muted=true; window.__fwPrimed[k]=a; const p=a.play(); if(p) p.then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); } } }catch(_){} }
-async function play(){ fwPrime();
-  started=true; token++; cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
+async function play(){
+  started=true; token++; cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel(); try{fwPrime();}catch(_){}
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone'); window.fwDone=false;
   try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
     await Promise.race([ctx.resume(),new Promise(function(r){setTimeout(r,350)})]); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
