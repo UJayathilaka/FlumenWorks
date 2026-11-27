@@ -3,7 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fulmen Works</title>
+<title>Fulmen Works — Five free Chrome extensions for product data work</title>
+<meta name="description" content="Fulmen Works by U Jay: five free Chrome extensions that take the repeated clicks out of uploading, checking and mapping product images and files.">
+<meta name="author" content="Udantha Jayathilaka">
+<meta name="theme-color" content="#0D1117">
+<link rel="canonical" href="https://udanthajayathilaka.github.io/FlumenWorks/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fulmen Works">
+<meta property="og:title" content="Fulmen Works — Five free Chrome extensions">
+<meta property="og:description" content="Free tools that take the repeated clicks out of uploading, checking and mapping product images and files.">
+<meta property="og:url" content="https://udanthajayathilaka.github.io/FlumenWorks/">
+<meta property="og:image" content="https://udanthajayathilaka.github.io/FlumenWorks/og-image.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -26,13 +39,11 @@ h2{font:700 24px/1.2 var(--display);color:var(--text);margin-bottom:18px}
 .card:hover{border-color:#3d4b61;transform:translateY(-2px)}
 .ico{flex:none;width:64px;height:64px;border-radius:16px;overflow:hidden}.ico svg{width:100%;height:100%;display:block}
 .body{display:contents}.card h3{grid-column:2;align-self:center}.card p,.card .foot{grid-column:1/-1}.card .foot{align-self:end}.foot{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:6px}.foot .meta{align-items:center}p{text-align:left;text-wrap:wrap}
-.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 h3{font:700 18px/1.25 var(--display);color:var(--text)}
 .free{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5CF0B6;background:rgba(0,214,143,.14);box-shadow:inset 0 0 0 1px rgba(0,214,143,.45);border-radius:99px;padding:2px 10px}
 .card p{font-size:14.5px;color:var(--muted)}
-.meta{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:#8D99AB;font-variant-numeric:tabular-nums}
-.meta span+span::before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:#5b6778;margin-right:14px;vertical-align:middle}
-.dl{align-self:flex-start;margin-top:6px;font:600 14px var(--body);color:#0D1117;background:var(--grad);border-radius:10px;padding:9px 16px;text-decoration:none;transition:filter .2s}.dl:hover{filter:brightness(1.1)}
+.meta{display:flex;row-gap:6px;flex-wrap:wrap;font-size:12.5px;color:#8D99AB;font-variant-numeric:tabular-nums;margin-left:-28px;clip-path:inset(-4px -4px -4px 28px)}
+.meta span{position:relative;margin-left:28px}.meta span::before{content:"";position:absolute;left:-16px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:#5b6778}
 .watch{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font:600 14px var(--body);color:var(--text);border:1px solid #3d4b61;border-radius:10px;padding:8px 14px;text-decoration:none;min-height:40px;transition:background .2s,border-color .2s}.watch:hover{background:rgba(255,255,255,.06);border-color:#5b6778}.watch svg{width:16px;height:16px;color:var(--emerald)}
 
 .mdl{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(7,10,14,0);backdrop-filter:blur(0);transition:background .35s,backdrop-filter .35s}
@@ -47,7 +58,7 @@ h3{font:700 18px/1.25 var(--display);color:var(--text)}
 #bgfar,#bgmid,#bgfx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}#bgfar{z-index:0;filter:blur(3px)}#bgmid{z-index:0;filter:blur(1.5px)}#bgfx{z-index:0}.wrap{position:relative;z-index:1}
 
 
-.show{margin-top:64px}.sl{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#0b0f15;aspect-ratio:16/10;box-shadow:0 24px 70px rgba(0,0,0,.45);touch-action:pan-y}
+.shots{margin-top:64px}.sl{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#0b0f15;aspect-ratio:16/10;box-shadow:0 24px 70px rgba(0,0,0,.45);touch-action:pan-y}
 .slide{position:absolute;inset:0;margin:0;opacity:0;visibility:hidden;transition:opacity 1s ease,visibility 0s 1s}.slide.on{opacity:1;visibility:visible;transition:opacity 1s ease}
 .slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1);transition:none}.slide.on img{transform:scale(1.07);transition:transform 9s linear}
 .slide::after{content:"";position:absolute;inset:auto 0 0 0;height:42%;background:linear-gradient(to top,rgba(8,11,16,.78),rgba(8,11,16,0));pointer-events:none}
@@ -57,28 +68,16 @@ h3{font:700 18px/1.25 var(--display);color:var(--text)}
 .cap b span{display:inline-block;transform:translateY(110%);opacity:0}.cap p{font-size:clamp(12.5px,1.4vw,15px);line-height:1.4;color:var(--soft);transform:translateY(8px);opacity:0}
 .cap.in b span{animation:wup .65s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.12s + var(--i)*.07s)}.cap.in p{animation:pup .6s ease .45s forwards}.cap.in .lg{animation:lpop .7s cubic-bezier(.34,1.5,.5,1) both}
 @keyframes wup{to{transform:none;opacity:1}}@keyframes pup{to{transform:none;opacity:1}}@keyframes lpop{from{transform:scale(.5) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
-}
-.sn{position:absolute;top:50%;translate:0 -50%;z-index:4;width:44px;height:44px;border-radius:50%;border:1px solid #3d4b61;background:rgba(13,17,23,.7);color:#fff;display:grid;place-items:center;cursor:pointer;transition:background .2s}.sn:hover{background:rgba(38,47,61,.95)}.sn:focus-visible,.dots button:focus-visible{outline:3px solid var(--emerald);outline-offset:2px}
-.sn svg{width:20px;height:20px}.sn.p{left:12px}.sn.n{right:12px}
 .num{position:absolute;z-index:4;right:clamp(14px,2.4vw,28px);top:clamp(12px,2vw,22px);font:600 13px var(--body);letter-spacing:.12em;color:#E6EBF2;background:rgba(13,17,23,.55);padding:4px 10px;border-radius:99px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.dots{position:absolute;z-index:4;right:clamp(14px,2.4vw,28px);bottom:clamp(14px,2.4vw,26px);display:flex;gap:2px}.dots button{width:24px;height:24px;border:0;background:none;cursor:pointer;display:grid;place-items:center}.dots button::before{content:"";width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.45);transition:width .3s,background .3s}.dots button[aria-selected=true]::before{width:22px;background:#fff}
-.bar{position:absolute;z-index:4;left:0;top:0;height:3px;width:100%;background:rgba(255,255,255,.1)}.bar i{display:block;height:100%;width:0;background:#E6EBF2}
 @media (max-width:640px){.cap{max-width:calc(100% - 28px)}.cap .lg{width:38px;height:38px;border-radius:10px}.cap b{font-size:15px}.cap p{display:none}.num{display:none}}
 @media (prefers-reduced-motion:reduce){.slide,.slide img{transition:none}.slide.on img{transform:none}.cap b span,.cap p{transform:none;opacity:1;animation:none!important}}
-.steps{margin-top:56px}.steps ol{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;list-style:none;counter-reset:s}
-.steps li{counter-increment:s;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:16px;font-size:14.5px;color:var(--muted)}
-.steps li::before{content:counter(s);display:grid;place-items:center;width:28px;height:28px;margin-bottom:10px;border-radius:50%;background:var(--grad);color:#0D1117;font:700 14px var(--display)}
-.steps b{color:var(--text)}.steps code{font-size:13px;color:var(--lime)}
 .creator{margin-top:64px;display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:clamp(24px,5vw,56px);align-items:center;padding:clamp(20px,4vw,36px);border:1px solid var(--line);border-radius:26px;background:rgba(21,28,39,.72)}
 .photo{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:20px;display:block;box-shadow:0 0 0 1px var(--line),0 24px 60px rgba(0,0,0,.5)}
 .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:8px}
 .creator h2{font-size:clamp(28px,4vw,40px);margin-bottom:4px}.aka{color:var(--muted);margin-bottom:16px}.who p:last-child{max-width:52ch;font-size:17px}
 @media (max-width:680px){.creator{grid-template-columns:1fr}.photo{max-width:340px}}
-.about{margin-top:56px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(182,255,0,.06),rgba(0,214,143,.04))}
-.avatar{width:72px;height:72px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font:800 26px var(--display);color:#0D1117}
-.about h2{margin-bottom:6px}.about p{max-width:60ch}
 footer{margin-top:40px;align-items:center;font-size:13px;color:#8D99AB;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media (max-width:560px){.about{grid-template-columns:1fr}.hero{padding-top:36px}}
+@media (max-width:560px){.hero{padding-top:36px}}
 @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 a:focus-visible,.card:focus-visible{outline:3px solid var(--emerald);outline-offset:3px}
 .fwhite{height:20px;width:auto;filter:brightness(0) invert(1);opacity:.85}
@@ -174,9 +173,9 @@ start();
 <p><b>Fulmen Works</b> is a small family of Chrome extensions. They take the repeated clicks out of uploading, checking and mapping product images and files. Each one does one job, and all of them are free.</p>
 </section>
 <section aria-labelledby="t"><h2 id="t">The five tools</h2><div class="grid"><article class="card"><div class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104"><defs><linearGradient id="vgxs" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="90" y2="90"><stop offset="0" stop-color="#B6FF00"/><stop offset="1" stop-color="#00D68F"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="#0D1117"/><path d="M52 66V28M36 44L52 28L68 44M30 64V76H74V64" fill="none" stroke="url(#vgxs)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="body"><h3>GXS Product Uploader</h3><p>Upload product images in batches. It sorts them automatically, fills the dropdowns for you, checks every upload and saves safely. You can stop instantly at any point.</p><div class="foot"><div class="meta"><span class="free">Free</span><span>v8.17.5</span><span>Works on graphxserver PDB</span></div><a class="watch" href="gxs-tutorial.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.4-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>Watch tutorial</a></div></div></article><article class="card"><div class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104"><defs><linearGradient id="vpdf" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="90" y2="90"><stop offset="0" stop-color="#B6FF00"/><stop offset="1" stop-color="#00D68F"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="#0D1117"/><g fill="none" stroke="url(#vpdf)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 20H58L76 38V84H30Z"/><path d="M58 20V38H76M42 54H64M42 64H64M42 74H54"/></g></svg></div><div class="body"><h3>PDF Layer Viewer</h3><p>Open a PDF, see every layer and switch each one on or off. Search layers, solo one, zoom in and select.</p><div class="foot"><div class="meta"><span class="free">Free</span><span>v1.12.0</span><span>Opens PDFs in its own tab</span></div></div></div></article><article class="card"><div class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104"><defs><linearGradient id="vimage" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="90" y2="90"><stop offset="0" stop-color="#B6FF00"/><stop offset="1" stop-color="#00D68F"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="#0D1117"/><g fill="none" stroke="url(#vimage)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="80" height="80" rx="15"/><path d="M20 82L31 68L42 82M62 82L74 66L84 80"/><circle cx="28" cy="28" r="3" fill="url(#vimage)" stroke="none"/></g><circle cx="52" cy="52" r="22" fill="url(#vimage)" stroke="#0D1117" stroke-width="6"/><path d="M52 40V62M41 52L52 63L63 52" fill="none" stroke="#0D1117" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="body"><h3>Image Downloader & Zipper</h3><p>Paste product image links. The tool sorts them into folders and downloads everything as one ZIP.</p><div class="foot"><div class="meta"><span class="free">Free</span><span>v5.4</span><span>Opens in its own tab</span></div></div></div></article><article class="card"><div class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104"><defs><linearGradient id="vmapper" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="90" y2="90"><stop offset="0" stop-color="#B6FF00"/><stop offset="1" stop-color="#00D68F"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="#0D1117"/><g fill="none" stroke="url(#vmapper)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="30" cy="70" r="8"/><circle cx="74" cy="34" r="8"/><path d="M38 70C58 70 44 36 66 36"/></g></svg></div><div class="body"><h3>Mapper Toolkit</h3><p>Copy rows, get help inside the product dialog, close the top window with Esc and export PSD files. All in one extension.</p><div class="foot"><div class="meta"><span class="free">Free</span><span>v2.2.5</span><span>Works on graphxserver pages</span></div></div></div></article><article class="card"><div class="ico"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104"><defs><linearGradient id="vmaster" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="90" y2="90"><stop offset="0" stop-color="#B6FF00"/><stop offset="1" stop-color="#00D68F"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="#0D1117"/><g fill="none" stroke="url(#vmaster)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"><path d="M52 20L78 31V52C78 68 66 78 52 84C38 78 26 68 26 52V31Z"/><path d="M40 52L49 61L65 43"/></g></svg></div><div class="body"><h3>Master Quality Checker</h3><p>Make PDB links from Part IDs, run the Master Check and check the images. One tool for the whole routine.</p><div class="foot"><div class="meta"><span class="free">Free</span><span>v2.104.3</span><span>Opens in its own tab</span></div></div></div></article></div></section>
-<section class="show" aria-label="Tool screenshots"><div class="sl" id="sl" role="region" aria-roledescription="carousel" aria-label="Tool screenshots"><figure class="slide on" role="group" aria-roledescription="slide" aria-label="1 of 5"><img src="shots/tool-1.webp" width="1280" height="800" alt="The GXS Product Uploader panel uploading a queue of product images"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="2 of 5"><img src="shots/tool-2.webp" width="1280" height="800" alt="The PDF Layer Viewer in dark theme with a layers list and a preview" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="3 of 5"><img src="shots/tool-3.webp" width="1280" height="800" alt="The Image Downloader with a list of pasted image links" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="4 of 5"><img src="shots/tool-4.webp" width="1280" height="800" alt="The Master Quality Checker data entry screen" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="5 of 5"><img src="shots/tool-5.webp" width="1280" height="800" alt="The Mapper Toolkit popup with copy options" loading="lazy"></figure><div class="cap" id="cap" aria-live="polite"><div class="lg" id="caplg" aria-hidden="true"></div><div class="tx"><b id="capb"></b><p id="capp"></p></div></div><div class="num" id="slnum" aria-hidden="true">01 / 05</div></div></section>
+<section class="shots" aria-label="Tool screenshots"><div class="sl" id="sl" role="region" aria-roledescription="carousel" aria-label="Tool screenshots"><figure class="slide on" role="group" aria-roledescription="slide" aria-label="1 of 5"><img src="shots/tool-1.webp" width="1280" height="800" alt="The GXS Product Uploader panel uploading a queue of product images"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="2 of 5"><img src="shots/tool-2.webp" width="1280" height="800" alt="The PDF Layer Viewer in dark theme with a layers list and a preview" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="3 of 5"><img src="shots/tool-3.webp" width="1280" height="800" alt="The Image Downloader with a list of pasted image links" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="4 of 5"><img src="shots/tool-4.webp" width="1280" height="800" alt="The Master Quality Checker data entry screen" loading="lazy"></figure><figure class="slide" role="group" aria-roledescription="slide" aria-label="5 of 5"><img src="shots/tool-5.webp" width="1280" height="800" alt="The Mapper Toolkit popup with copy options" loading="lazy"></figure><div class="cap" id="cap" aria-live="off"><div class="lg" id="caplg" aria-hidden="true"></div><div class="tx"><b id="capb"></b><p id="capp"></p></div></div><div class="num" id="slnum" aria-hidden="true">01 / 05</div></div></section>
 <section class="creator" aria-labelledby="a">
-<img class="photo" src="u-jay.jpg?v=3" width="640" height="800" alt="U Jay, creator of Fulmen Works">
+<img class="photo" src="u-jay.jpg?v=3" width="640" height="800" loading="lazy" decoding="async" alt="U Jay, creator of Fulmen Works">
 <div class="who"><p class="eyebrow">Creator</p><h2 id="a">Udantha Jayathilaka</h2><p class="aka">Known as U Jay</p>
 <p>I build Fulmen Works. Every tool here started as a repeated task in my own product data work, and I turned it into a one-click extension so it never has to be done by hand again.</p></div>
 </section>
@@ -191,29 +190,28 @@ function close(){ if(busy||!m.classList.contains('show')) return; busy=true; m.c
   setTimeout(function(){ m.classList.remove('show','closing'); m.setAttribute('aria-hidden','true'); document.body.style.overflow=''; busy=false; if(last) last.focus(); },320); fadeT=setTimeout(function(){ f.src='about:blank'; },1300); }
 document.querySelectorAll('a.watch').forEach(function(a){ a.addEventListener('click',function(e){ e.preventDefault(); open(a); }); });
 x.addEventListener('click',close); m.addEventListener('click',function(e){ if(e.target===m) close(); });
-addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+addEventListener('keydown',function(e){ if(!m.classList.contains('show')) return; if(e.key==='Escape') close(); });
 addEventListener('message',function(e){ if(e.source===f.contentWindow&&e.data&&e.data.type==='fw-tutorial-end') close(); });
 })();
 </script>
 <script>
 (function(){
 var root=document.getElementById('sl'); if(!root) return;
-var D=[["GXS Product Uploader", "Batch upload with live progress and a Stop button."], ["PDF Layer Viewer", "Switch each layer on or off, then export what you need."], ["Image Downloader & Zipper", "Paste links and get one neatly sorted ZIP."], ["Master Quality Checker", "Make links, run the Master Check, verify the images."], ["Mapper Toolkit", "Copy rows and speed up product dialogs in one click."]], slides=[].slice.call(root.querySelectorAll('.slide')), dots=[], bar=document.getElementById('slbar')||{style:{},parentNode:{style:{}}},
+var D=[["GXS Product Uploader", "Batch upload with live progress and a Stop button."], ["PDF Layer Viewer", "Switch each layer on or off, then export what you need."], ["Image Downloader & Zipper", "Paste links and get one neatly sorted ZIP."], ["Master Quality Checker", "Make links, run the Master Check, verify the images."], ["Mapper Toolkit", "Copy rows and speed up product dialogs in one click."]], slides=[].slice.call(root.querySelectorAll('.slide')),
  cap=document.getElementById('cap'), lg=document.getElementById('caplg'), cb=document.getElementById('capb'), cp=document.getElementById('capp'), num=document.getElementById('slnum'),
- logos=[].slice.call(document.querySelectorAll('.card .ico svg')), i=0, T=5800, t0=0, paused=false, vis=true, reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ logos=[].slice.call(document.querySelectorAll('.card .ico svg')), i=0, T=5800, el=0, lastT=0, paused=false, vis=true, reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function esc(x){ return x.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function text(n){ cb.innerHTML=D[n][0].split(' ').map(function(w,k){ return '<span style="--i:'+k+'">'+esc(w)+'</span>'; }).join(' '); cp.textContent=D[n][1];
   lg.innerHTML=''; if(logos[n]) lg.appendChild(logos[n].cloneNode(true));
   cap.classList.remove('in'); void cap.offsetWidth; cap.classList.add('in'); }
-function go(n){ i=(n+slides.length)%slides.length; slides.forEach(function(s,k){ s.classList.toggle('on',k===i); }); dots.forEach(function(d,k){ d.setAttribute('aria-selected',k===i); }); num.textContent=('0'+(i+1))+' / 0'+slides.length; text(i); t0=performance.now(); }
-function tick(now){ if(!paused&&vis&&!document.hidden){ var k=(now-t0)/T; bar.style.width=Math.min(100,k*100)+'%'; if(k>=1) go(i+1); } else t0=now-(parseFloat(bar.style.width)||0)/100*T; requestAnimationFrame(tick); }
-dots.forEach(function(d,k){ d.addEventListener('click',function(){ go(k); }); });
+function go(n){ i=(n+slides.length)%slides.length; slides.forEach(function(s,k){ s.classList.toggle('on',k===i); }); num.textContent=('0'+(i+1))+' / 0'+slides.length; text(i); el=0; }
+function tick(now){ var dt=lastT?now-lastT:0; lastT=now; if(!paused&&vis&&!document.hidden){ el+=Math.min(dt,100); if(el>=T) go(i+1); } requestAnimationFrame(tick); }
 root.addEventListener('mouseenter',function(){ paused=true; }); root.addEventListener('mouseleave',function(){ paused=false; });
 root.addEventListener('focusin',function(){ paused=true; }); root.addEventListener('focusout',function(){ paused=false; });
 root.addEventListener('keydown',function(e){ if(e.key==='ArrowRight') go(i+1); else if(e.key==='ArrowLeft') go(i-1); });
 var sx=null; root.addEventListener('pointerdown',function(e){ sx=e.clientX; }); root.addEventListener('pointerup',function(e){ if(sx===null) return; var d=e.clientX-sx; sx=null; if(Math.abs(d)>40) go(i+(d<0?1:-1)); });
 if('IntersectionObserver' in window) new IntersectionObserver(function(e){ vis=e[0].isIntersecting; if(vis) go(i); },{threshold:.35}).observe(root);
-go(0); if(!reduce){ requestAnimationFrame(tick); } else { bar.parentNode.style.display='none'; }
+go(0); if(!reduce) requestAnimationFrame(tick);
 })();
 </script>
 </body>
