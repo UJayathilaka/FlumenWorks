@@ -10,4 +10,4 @@ Five free Chrome extensions by Udantha Jayathilaka (U Jay) that take the repeate
 | Mapper Toolkit | v2.2.5 | Copies rows and speeds up product dialogs |
 | Master Quality Checker | v2.104.3 | Makes PDB links, runs the Master Check, verifies images |
 
-Live site: https://udanthajayathilaka.github.io/FlumenWorks/
+Live site: https://udanthajayathilaka.github.io/FulmenWorks/
