@@ -129,6 +129,9 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
 #cur .rip{position:absolute;left:-.2em;top:-.2em;width:2.2em;height:2.2em;border-radius:50%;border:.2em solid var(--lime);opacity:0}
 #cur.click .rip{animation:rip .55s ease-out}@keyframes rip{from{opacity:.9;transform:scale(.3)}to{opacity:0;transform:scale(1.6)}}
 @media (prefers-reduced-motion:reduce){#tut::before,.tog{animation:none}}
+
+.ctrls{flex-wrap:wrap;justify-content:center;padding:0 10px;bottom:clamp(8px,2.2vh,28px);row-gap:8px}
+@media (max-width:560px){.ctrls{gap:8px}.ctrls .btn{padding:0 12px;font-size:13px;min-height:40px}.vsel select{min-height:40px;max-width:160px;font-size:13px}#muteLbl{display:none}#tut{padding-bottom:110px}}
 </style>
 </head>
 <body>
@@ -194,7 +197,7 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
   </div>
   <div class="ctrls show" id="ctrls">
     <button class="btn primary" id="replay" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Replay</button>
-    <button class="btn on" id="cc" type="button" aria-pressed="true">CC</button>
+    <button class="btn" id="cc" type="button" aria-pressed="false">CC</button>
     <label class="vsel"><span class="sr">Narrator voice</span><select id="vsel"><option value="">Voice: off (captions only)</option></select></label>
     <button class="btn" id="mute" type="button" aria-pressed="false"><svg id="muteIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span id="muteLbl">Sound on</span></button>
   </div>
@@ -609,6 +612,10 @@ let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ la
 window.fwSkip=from=>{ started=true; startEl.classList.add('hide'); stage.classList.add('gone'); $('fx').classList.add('gone'); runTutorial(from||0); };
 
 layout(); render(-1);
+cap.classList.add('off');
+addEventListener('message',e=>{ if(!(e.data&&e.data.type==='fw-fade')) return; const ms=e.data.ms||1000; token++; if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(ctx&&bus) bus.master.gain.setTargetAtTime(0,ctx.currentTime,ms/3000);
+  const a=window.__aud; if(a){ const v0=a.volume, t0=performance.now(), iv=setInterval(()=>{ const k=Math.min(1,(performance.now()-t0)/ms); a.volume=v0*(1-k); if(k>=1){ clearInterval(iv); a.pause(); } },30); } });
 if(/[?&]autoplay=1/.test(location.search)){ startEl.classList.add('hide'); (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(play,150)); }
 
 })();
