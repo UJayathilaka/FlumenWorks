@@ -570,7 +570,7 @@ async function runTutorial(from){
   const my=++token; const base=W0(my);
   resetUI(); tut.classList.add('on'); startMusic();
   let rec=null, aud=null; const key=voiceName.startsWith('rec-')?voiceName.slice(4):'';
-  if(key){ rec=REC[key]; aud=new Audio(rec.src); window.__aud=aud; aud.muted=muted; aud.preload='auto';
+  if(key){ rec=REC[key]; aud=(window.__fwPrimed&&__fwPrimed[key])||new Audio(rec.src); aud.volume=1; window.__aud=aud; aud.muted=muted; aud.preload='auto';
     try{ aud.currentTime=from?rec.t[from][0]:0; await aud.play(); duck(true); }catch(e){ rec=null; aud=null; } }
   try{
     for(let i=from||0;i<SCENES.length;i++){
@@ -599,7 +599,9 @@ function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.
   const b=document.createElement('button'); b.id='fwtap'; b.type='button'; b.textContent='🔊 Tap for sound';
   b.style.cssText='position:fixed;z-index:99;top:12px;left:50%;transform:translateX(-50%);padding:9px 16px;border-radius:999px;border:1px solid rgba(182,255,0,.5);background:rgba(13,17,23,.88);color:#B6FF00;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent';
   b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
-async function play(){
+function fwPrime(){ try{ if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); } }catch(_){}
+  try{ if(typeof REC!=='undefined'){ window.__fwPrimed=window.__fwPrimed||{}; for(const k in REC){ const a=window.__fwPrimed[k]||new Audio(REC[k].src); window.__fwPrimed[k]=a; const p=a.play(); if(p) p.then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); } } }catch(_){} }
+async function play(){ fwPrime();
   started=true; token++; if(window.__aud) try{__aud.pause();}catch(e){} cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone');
   try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
