@@ -433,12 +433,11 @@ function populateVoices(){
   if(!('speechSynthesis' in window)) return;
   VOICES=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
   const sel=$('vsel'), keep=voiceName;
-  sel.innerHTML=REC_OPTS+'<option value="">Voice: off (captions only)</option>'+VOICES.map(v=>`<option value="${v.name.replace(/"/g,'&quot;')}">${v.name}</option>`).join('');
+  sel.innerHTML=REC_OPTS;
   sel.value=voiceName;
 }
-$('vsel').innerHTML=REC_OPTS+'<option value="">Voice: off (captions only)</option>'; voiceName='rec-en'; $('vsel').value=voiceName;
-if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=populateVoices; populateVoices(); }
-$('vsel').addEventListener('change',e=>{ voiceName=e.target.value; });
+$('vsel').innerHTML=REC_OPTS; voiceName='rec-en'; $('vsel').value=voiceName;
+$('vsel').addEventListener('change',e=>{ voiceName=e.target.value; if(started) play(); });
 function speak(text){
   const est=Math.max(2200,text.split(/\s+/).length*400+700);
   return new Promise(res=>{
@@ -585,7 +584,8 @@ async function runTutorial(from){
 }
 async function finish(my){
   tut.classList.remove('on'); stopMusic(); await new Promise(r=>setTimeout(r,500)); if(my!==token) return;
-  stage.classList.remove('gone'); $('fx').classList.remove('gone'); render(TL.END); $('replay').hidden=false; $('replay').focus();
+  stage.classList.remove('gone'); $('fx').classList.remove('gone'); render(TL.END); $('replay').hidden=false;
+  if(window.parent!==window){ setTimeout(()=>{ if(my===token) parent.postMessage({type:'fw-tutorial-end'},'*'); },1600); } else $('replay').focus();
 }
 
 /* ── start / replay ── */
@@ -595,7 +595,7 @@ async function play(){
   started=true; token++; if(window.__aud) try{__aud.pause();}catch(e){} cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone');
   try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
-    await ctx.resume(); T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
+    await ctx.resume(); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
   }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; }
   render(-1); loop();
 }
@@ -609,6 +609,7 @@ let rz; addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ la
 window.fwSkip=from=>{ started=true; startEl.classList.add('hide'); stage.classList.add('gone'); $('fx').classList.add('gone'); runTutorial(from||0); };
 
 layout(); render(-1);
+if(/[?&]autoplay=1/.test(location.search)){ startEl.classList.add('hide'); (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(play,150)); }
 
 })();
 </script>
