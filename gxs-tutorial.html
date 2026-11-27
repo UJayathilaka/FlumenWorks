@@ -203,6 +203,8 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
   </div>
 </div>
 
+<script>function fwSS(){ try{ if(window.parent!==window&&parent.speechSynthesis&&parent.__fwUnlocked) return parent.speechSynthesis; }catch(e){} return window.speechSynthesis; }
+function fwCtx(AC){ try{ if(window.parent!==window&&parent.__fwCtx&&parent.__fwCtx.state!=='closed'){ var c=parent.__fwCtx; parent.__fwCtx=null; return c; } }catch(e){} return new AC(); }</script>
 <script>
 (function(){
 'use strict';
@@ -434,7 +436,7 @@ function nowT(){ if(ctx){ return ctx.currentTime-T0-(ctx.outputLatency||ctx.base
 /* ── voice (browser text-to-speech, English) ── */
 function populateVoices(){
   if(!('speechSynthesis' in window)) return;
-  VOICES=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  VOICES=fwSS().getVoices().filter(v=>/^en/i.test(v.lang));
   const sel=$('vsel'), keep=voiceName;
   sel.innerHTML=REC_OPTS;
   sel.value=voiceName;
@@ -448,7 +450,7 @@ function speak(text){
     if(!v){ setTimeout(res,est); return; }
     let done=false, tm=0; const end=()=>{ if(done) return; done=true; clearTimeout(tm); duck(false); res(); };
     const u=new SpeechSynthesisUtterance(text); u.voice=v; u.lang=v.lang; u.rate=1; u.volume=muted?0:1; u.onend=end; u.onerror=end;
-    tm=setTimeout(end,est*2.2+1500); duck(true); speechSynthesis.speak(u);
+    tm=setTimeout(end,est*2.2+1500); duck(true); fwSS().speak(u);
   });
 }
 
@@ -599,13 +601,13 @@ function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.
   const b=document.createElement('button'); b.id='fwtap'; b.type='button'; b.textContent='🔊 Tap for sound';
   b.style.cssText='position:fixed;z-index:99;top:12px;left:50%;transform:translateX(-50%);padding:9px 16px;border-radius:999px;border:1px solid rgba(182,255,0,.5);background:rgba(13,17,23,.88);color:#B6FF00;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent';
   b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
-function fwPrime(){ try{ if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); } }catch(_){}
+function fwPrime(){ try{ if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; fwSS().speak(u); } }catch(_){}
   try{ if(typeof REC!=='undefined'&&typeof voiceName==='string'&&voiceName.indexOf('rec-')===0){ const k=voiceName.slice(4); window.__fwPrimed=window.__fwPrimed||{}; if(REC[k]){ const a=new Audio(REC[k].src); a.muted=true; window.__fwPrimed[k]=a; const p=a.play(); if(p) p.then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); } } }catch(_){} }
-function fwStopVoice(){ try{ if(window.__aud){ __aud.pause(); __aud.currentTime=0; } }catch(_){} try{ speechSynthesis.cancel(); }catch(_){} }
+function fwStopVoice(){ try{ if(window.__aud){ __aud.pause(); __aud.currentTime=0; } }catch(_){} try{ fwSS().cancel(); }catch(_){} }
 async function play(){ fwStopVoice(); fwPrime();
-  started=true; token++; if(window.__aud) try{__aud.pause();}catch(e){} cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
+  started=true; token++; if(window.__aud) try{__aud.pause();}catch(e){} cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) fwSS().cancel();
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone');
-  try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
+  try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=fwCtx(AC); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
     await Promise.race([ctx.resume(),new Promise(function(r){setTimeout(r,350)})]); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
   }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; try{fwTapSound(play);}catch(_){} }
   render(-1); loop();
@@ -621,7 +623,7 @@ window.fwSkip=from=>{ started=true; startEl.classList.add('hide'); stage.classLi
 
 layout(); render(-1);
 cap.classList.add('off');
-addEventListener('message',e=>{ if(!(e.data&&e.data.type==='fw-fade')) return; const ms=e.data.ms||1000; token++; if('speechSynthesis' in window) speechSynthesis.cancel();
+addEventListener('message',e=>{ if(!(e.data&&e.data.type==='fw-fade')) return; const ms=e.data.ms||1000; token++; if('speechSynthesis' in window) fwSS().cancel();
   if(ctx&&bus) bus.master.gain.setTargetAtTime(0,ctx.currentTime,ms/3000);
   const a=window.__aud; if(a){ const v0=a.volume, t0=performance.now(), iv=setInterval(()=>{ const k=Math.min(1,(performance.now()-t0)/ms); a.volume=v0*(1-k); if(k>=1){ clearInterval(iv); a.pause(); } },30); } });
 if(/[?&]autoplay=1/.test(location.search)){ startEl.classList.add('hide'); (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(play,150)); }
