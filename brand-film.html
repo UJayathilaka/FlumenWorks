@@ -46,7 +46,7 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
 .ctrls{z-index:9;gap:10px}.btn[hidden]{display:none}
 #film{position:absolute;inset:0;z-index:6;display:grid;place-items:center;opacity:0;pointer-events:none;overflow:hidden}
 #film.on{opacity:1}
-.fr{position:relative;width:min(100vw,calc(100vh*1.7778));aspect-ratio:16/9;container-type:inline-size;overflow:hidden}
+.fr{position:relative;width:min(100vw,calc(100vh*1.7778));width:min(100vw,calc(100dvh*1.7778));aspect-ratio:16/9;container-type:inline-size;overflow:hidden}
 .fi{position:absolute;inset:0;font-size:1cqw;color:#E6EBF2}
 .L{position:absolute;opacity:0;will-change:transform,opacity}
 /* backdrop */
@@ -468,13 +468,18 @@ function finish(){
   if(ended) return; ended=true; filmAt(DUR); $('replay').hidden=false;
   if(window.parent!==window) setTimeout(()=>parent.postMessage({type:'fw-tutorial-end'},'*'),1400); else $('replay').focus();
 }
+
+function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.getElementById('fwtap')) return;
+  const b=document.createElement('button'); b.id='fwtap'; b.type='button'; b.textContent='🔊 Tap for sound';
+  b.style.cssText='position:fixed;z-index:99;top:12px;left:50%;transform:translateX(-50%);padding:9px 16px;border-radius:999px;border:1px solid rgba(182,255,0,.5);background:rgba(13,17,23,.88);color:#B6FF00;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent';
+  b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
 async function play(){
   started=true; ended=false; cloned=false; fe('endlogo').innerHTML=''; curTool=-1; cancelAnimationFrame(raf);
   startEl.classList.add('hide'); $('replay').hidden=true; film.classList.remove('on'); $('stage').classList.remove('gone'); $('fx').classList.remove('gone');
   try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); }
     bus.master.gain.cancelScheduledValues(ctx.currentTime); bus.master.gain.value=muted?0:0.9;
-    await ctx.resume(); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0); filmScore(ctx,bus,T0+FS);
-  }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; }
+    await Promise.race([ctx.resume(),new Promise(function(r){setTimeout(r,350)})]); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0); filmScore(ctx,bus,T0+FS);
+  }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; try{fwTapSound(play);}catch(_){} }
   render(-1); filmAt(0); loop();
 }
 startEl.addEventListener('click',play);

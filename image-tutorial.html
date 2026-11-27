@@ -52,7 +52,7 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:Inter,system-u
 #tut.on{opacity:1}
 #tut::before{content:"";position:absolute;inset:0;background:radial-gradient(45em 32em at 18% 28%,rgba(182,255,0,.05),transparent 70%),radial-gradient(55em 42em at 82% 72%,rgba(0,214,143,.08),transparent 70%);animation:drift 18s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translate(2%,-2%) scale(1.06)}}
-.frame{position:relative;width:min(96vw,calc((100vh - 200px)*1.7778));aspect-ratio:16/9;container-type:inline-size}
+.frame{position:relative;width:min(96vw,calc((100vh - 200px)*1.7778));width:min(96vw,calc((100dvh - 200px)*1.7778));aspect-ratio:16/9;container-type:inline-size}
 .fin{position:relative;width:100%;height:100%;font-size:1cqw;color:var(--soft);transition:opacity .6s}.fin.fade{opacity:0}
 #cap{position:relative;z-index:2;max-width:min(96vw,1100px);min-height:2.7em;padding:.35em .9em;border-radius:12px;background:rgba(13,17,23,.55);text-align:center;font:600 clamp(14px,1.9vw,23px)/1.35 'Bricolage Grotesque',Inter,sans-serif;color:#fff;text-wrap:balance;opacity:0;transition:opacity .25s}
 #cap.show{opacity:1}#cap.off{display:none}
@@ -582,12 +582,17 @@ async function finish(my){
 /* ── start / replay ── */
 function loop(){ const t=nowT(); render(t); if(t<TL.SHOW+0.7) raf=requestAnimationFrame(loop); else toTutorial(); }
 function toTutorial(){ stage.classList.add('gone'); $('fx').classList.add('gone'); runTutorial(0); }
+
+function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.getElementById('fwtap')) return;
+  const b=document.createElement('button'); b.id='fwtap'; b.type='button'; b.textContent='🔊 Tap for sound';
+  b.style.cssText='position:fixed;z-index:99;top:12px;left:50%;transform:translateX(-50%);padding:9px 16px;border-radius:999px;border:1px solid rgba(182,255,0,.5);background:rgba(13,17,23,.88);color:#B6FF00;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent';
+  b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
 async function play(){
   started=true; token++; cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone'); window.fwDone=false;
   try{ if(!ctx){ const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); bus=buildBus(ctx); bus.master.gain.value=muted?0:0.9; }
-    await ctx.resume(); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
-  }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; }
+    await Promise.race([ctx.resume(),new Promise(function(r){setTimeout(r,350)})]); if(ctx.state!=='running') throw 0; T0=ctx.currentTime+0.15; scheduleAudio(ctx,bus,T0);
+  }catch(e){ ctx=null; bus=null; fallbackStart=performance.now()+150; try{fwTapSound(play);}catch(_){} }
   render(-1); loop();
 }
 startEl.addEventListener('click',play);
