@@ -199,10 +199,10 @@ addEventListener('message',function(e){ if(e.source===f.contentWindow&&e.data&&e
 var root=document.getElementById('sl'); if(!root) return;
 var D=[["GXS Product Uploader", "Batch upload with live progress and a Stop button."], ["PDF Layer Viewer", "Switch each layer on or off, then export what you need."], ["Image Downloader & Zipper", "Paste links and get one neatly sorted ZIP."], ["Master Quality Checker", "Make links, run the Master Check, verify the images."], ["Mapper Toolkit", "Copy rows and speed up product dialogs in one click."]], slides=[].slice.call(root.querySelectorAll('.slide')),
  cap=document.getElementById('cap'), lg=document.getElementById('caplg'), cb=document.getElementById('capb'), cp=document.getElementById('capp'), num=document.getElementById('slnum'),
- logos=[].slice.call(document.querySelectorAll('.card .ico svg')), i=0, T=5800, el=0, lastT=0, paused=false, vis=true, reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ cards=[].slice.call(document.querySelectorAll('.card')), i=0, T=5800, el=0, lastT=0, paused=false, vis=true, reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function esc(x){ return x.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 function text(n){ cb.innerHTML=D[n][0].split(' ').map(function(w,k){ return '<span style="--i:'+k+'">'+esc(w)+'</span>'; }).join(' '); cp.textContent=D[n][1];
-  lg.innerHTML=''; if(logos[n]) lg.appendChild(logos[n].cloneNode(true));
+  lg.innerHTML=''; var cd=cards.filter(function(c){ var h=c.querySelector('h3'); return h&&h.textContent.trim()===D[n][0]; })[0], ic=cd&&cd.querySelector('.ico svg'); if(ic) lg.appendChild(ic.cloneNode(true));
   cap.classList.remove('in'); void cap.offsetWidth; cap.classList.add('in'); }
 function go(n){ i=(n+slides.length)%slides.length; slides.forEach(function(s,k){ s.classList.toggle('on',k===i); }); num.textContent=('0'+(i+1))+' / 0'+slides.length; text(i); el=0; }
 function tick(now){ var dt=lastT?now-lastT:0; lastT=now; if(!paused&&vis&&!document.hidden){ el+=Math.min(dt,100); if(el>=T) go(i+1); } requestAnimationFrame(tick); }
