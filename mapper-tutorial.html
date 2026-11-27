@@ -448,7 +448,7 @@ function populateVoices(){
 }
 if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=populateVoices; populateVoices(); }
 function syncCaps(){ const on=!voiceName||capOn; cap.classList.toggle('off',!on); $('cc').classList.toggle('on',on); $('cc').setAttribute('aria-pressed',on); }
-let capOn=false;
+var capOn=false;
 $('vsel').addEventListener('change',e=>{ voiceName=e.target.value; syncCaps(); if(started) play(); });
 function speak(text){
   const est=Math.max(2200,text.split(/\s+/).length*390+600);
@@ -588,7 +588,7 @@ function fwTapSound(play){ if(!/[?&]autoplay=1/.test(location.search)||document.
   b.style.cssText='position:fixed;z-index:99;top:12px;left:50%;transform:translateX(-50%);padding:9px 16px;border-radius:999px;border:1px solid rgba(182,255,0,.5);background:rgba(13,17,23,.88);color:#B6FF00;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent';
   b.addEventListener('click',function(){ b.remove(); play(); }); document.body.appendChild(b); }
 function fwPrime(){ try{ if('speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); } }catch(_){}
-  try{ if(typeof REC!=='undefined'){ window.__fwPrimed=window.__fwPrimed||{}; for(const k in REC){ const a=window.__fwPrimed[k]||new Audio(REC[k].src); window.__fwPrimed[k]=a; const p=a.play(); if(p) p.then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); } } }catch(_){} }
+  try{ if(typeof REC!=='undefined'&&typeof voiceName==='string'&&voiceName.indexOf('rec-')===0){ const k=voiceName.slice(4); window.__fwPrimed=window.__fwPrimed||{}; if(REC[k]){ const a=new Audio(REC[k].src); a.muted=true; window.__fwPrimed[k]=a; const p=a.play(); if(p) p.then(function(){ a.pause(); a.currentTime=0; }).catch(function(){}); } } }catch(_){} }
 async function play(){ fwPrime();
   started=true; token++; cancelAnimationFrame(raf); stopMusic(true); if('speechSynthesis' in window) speechSynthesis.cancel();
   startEl.classList.add('hide'); $('replay').hidden=true; tut.classList.remove('on'); stage.classList.remove('gone'); $('fx').classList.remove('gone'); window.fwDone=false;
